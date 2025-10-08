@@ -135,10 +135,10 @@ pub fn derive(input: TokenStream) -> TokenStream {
             !get_inner_type_of_option(ty).is_some() && !input_fields_each[*idx].is_some()
         })
         .map(|((_, ident), _)| {
-            let ident_str = ident.to_string();
             quote! {
                 if self.#ident.is_none() {
-                    return Err(format!("missing field: {}", #ident_str).to_string().into());
+                    // stringify!() will transform the expression to its literal string without evaluating it.
+                    return Err(format!("missing field: {}", stringify!(#ident)).to_string().into());
                 }
             }
         })
